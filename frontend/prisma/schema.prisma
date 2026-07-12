@@ -83,7 +83,7 @@ model Movie {
   releaseDate     String?
   
   // Rental System Pricing
-  previewDuration Int      @default(120) // in seconds (2 mins)
+  previewDuration Int      @default(80) // in seconds (1 min 20 secs)
   price24h        Float?
   price7d         Float?
   priceLifetime   Float?

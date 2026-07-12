@@ -70,7 +70,7 @@ export async function PUT(
         genres: data.genres,
         year: parseInt(data.year),
         duration: data.duration,
-        previewDuration: parseInt(data.previewDuration || "120"),
+        previewDuration: parseInt(data.previewDuration || "80"),
         price24h: parseFloat(data.price24h),
         price7d: parseFloat(data.price7d),
         priceLifetime: parseFloat(data.priceLifetime),
