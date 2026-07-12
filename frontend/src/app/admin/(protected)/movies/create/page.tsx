@@ -21,7 +21,7 @@ export default function AdminMovieCreatePage() {
     genres: "Action, Sci-Fi",
     year: "2025",
     duration: "120",
-    previewDuration: "90",
+    previewDuration: "1080",
     price24h: "15",
     price7d: "0",
     priceLifetime: "0",

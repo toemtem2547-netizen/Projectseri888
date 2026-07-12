@@ -9,7 +9,7 @@ interface Props {
 }
 
 import Link from "next/link";
-import { Play } from "lucide-react";
+import { Play, ChevronLeft } from "lucide-react";
 
 export default async function WatchPage({ params, searchParams }: Props) {
   const { id } = await params;
@@ -60,7 +60,7 @@ export default async function WatchPage({ params, searchParams }: Props) {
     }
   }
 
-  const isSeries = movie.type === 'SERIES';
+  const isSeries = movie.type === 'SERIES' && movie.episodes.length > 0;
 
   return (
     <main className="min-h-screen bg-cv-deep p-4 md:p-6 text-white pt-24">
@@ -68,6 +68,12 @@ export default async function WatchPage({ params, searchParams }: Props) {
         <div className={`grid grid-cols-1 ${isSeries ? 'lg:grid-cols-4 gap-6' : ''}`}>
           <div className={`${isSeries ? 'lg:col-span-3 flex flex-col items-center' : 'w-full max-w-[1440px] mx-auto'}`}>
             <div className={`${isSeries ? 'w-full max-w-[450px]' : 'w-full'}`}>
+              <div className="mb-4 flex">
+                <Link href={`/movie/${movie.id}`} className="inline-flex items-center gap-2 text-sm font-medium text-cv-text-dim hover:text-white transition-colors bg-white/5 hover:bg-white/10 px-4 py-2 rounded-full border border-white/10">
+                  <ChevronLeft className="w-4 h-4" />
+                  กลับไปหน้าข้อมูล
+                </Link>
+              </div>
               <h1 className="mb-4 text-2xl font-bold font-heading">{titleToPlay}</h1>
               <PreviewPlayer 
                 movie={playerMovie} 
@@ -75,7 +81,6 @@ export default async function WatchPage({ params, searchParams }: Props) {
                 isUnlockedServer={isUnlockedServer} 
                 initialProgress={initialProgress}
                 nextEpisodeUrl={isSeries && currentEpNumber < movie.episodes.length ? `/watch/${movie.id}?ep=${currentEpNumber + 1}` : undefined}
-                isVertical={movie.type === 'SERIES'}
               />
 
               <section className="mt-6 rounded-2xl bg-white/5 border border-white/10 p-5 backdrop-blur-md">
@@ -86,7 +91,7 @@ export default async function WatchPage({ params, searchParams }: Props) {
           </div>
 
           {/* Episode Sidebar for Series */}
-          {isSeries && movie.episodes.length > 0 && (
+          {isSeries && (
             <div className="lg:col-span-1 h-full">
               <div className="bg-white/5 border border-white/10 rounded-2xl p-4 sticky top-24 max-h-[calc(100vh-120px)] flex flex-col">
                 <h2 className="text-xl font-bold text-white mb-4 font-heading flex items-center gap-2">

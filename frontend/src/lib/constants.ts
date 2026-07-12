@@ -6,7 +6,7 @@ export const APP_NAME = "SERIX888";
 export const APP_TAGLINE = "ประสบการณ์ภาพยนตร์พรีเมียมสำหรับคนไทย";
 export const APP_DESCRIPTION = "ค้นหา เช่า และรับชมหนัง ซีรีส์คุณภาพสูงในสไตล์แพลตฟอร์มไทยแลนด์";
 
-export const PREVIEW_DURATION = 30; // 30 seconds
+export const PREVIEW_DURATION = 1080; // 18 minutes (1080 seconds)
 
 export const NAV_LINKS = [
   { label: "หน้าหลัก", href: "/" },

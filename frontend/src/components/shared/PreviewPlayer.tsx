@@ -242,7 +242,7 @@ export default function PreviewPlayer({ movie, previewSeconds = PREVIEW_DURATION
   return (
     <div className="mx-auto w-full max-w-[1440px] flex flex-col gap-4">
       {/* Video Container */}
-      <div className={`relative w-full overflow-hidden rounded-[32px] border border-white/10 bg-black/80 shadow-[0_30px_120px_rgba(15,23,42,0.7)] ${isSeriesState ? 'max-w-[450px] mx-auto aspect-[9/16]' : 'aspect-video'}`}>
+      <div className={`relative w-full overflow-hidden rounded-[32px] border border-white/10 bg-black/80 shadow-[0_30px_120px_rgba(15,23,42,0.7)] ${isSeriesState ? 'aspect-[9/16] md:aspect-video' : 'aspect-video'}`}>
       {isIframe ? (
         (!isUnlocked && currentTime >= previewSeconds) ? (
           <div className="w-full h-full bg-black flex flex-col items-center justify-center relative">

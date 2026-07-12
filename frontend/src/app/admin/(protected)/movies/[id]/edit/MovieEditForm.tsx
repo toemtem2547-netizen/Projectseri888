@@ -20,7 +20,7 @@ export default function MovieEditForm({ movie }: { movie: any }) {
     genres: movie.genres || "",
     year: movie.year?.toString() || "",
     duration: movie.duration || "",
-    previewDuration: movie.previewDuration?.toString() || "90",
+    previewDuration: movie.previewDuration?.toString() || "1080",
     price24h: movie.price24h?.toString() || "",
     price7d: movie.price7d?.toString() || "",
     priceLifetime: movie.priceLifetime?.toString() || "",
