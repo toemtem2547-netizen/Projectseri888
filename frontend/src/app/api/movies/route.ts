@@ -82,7 +82,7 @@ export async function POST(request: Request) {
         genres: data.genres,
         year: parseInt(data.year),
         duration: data.duration,
-        previewDuration: parseInt(data.previewDuration || "80"),
+        previewDuration: parseInt(data.previewDuration || "90"),
         price24h: parseFloat(data.price24h),
         price7d: parseFloat(data.price7d),
         priceLifetime: parseFloat(data.priceLifetime),
