@@ -1,0 +1,249 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+  password      String?
+  role          String    @default("USER") // ADMIN or USER
+  accounts      Account[]
+  sessions      Session[]
+  rentals       Rental[]
+  payments      Payment[]
+  watchHistory  WatchHistory[]
+  watchlist     Watchlist[]
+  reviews       Review[]
+  subscriptions Subscription[]
+  notifications Notification[]
+}
+
+model Account {
+  id                 String  @id @default(cuid())
+  userId             String
+  type               String
+  provider           String
+  providerAccountId  String
+  refresh_token      String?
+  access_token       String?
+  expires_at         Int?
+  token_type         String?
+  scope              String?
+  id_token           String?
+  session_state      String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model Movie {
+  id              String   @id @default(cuid())
+  type            String   @default("MOVIE") // MOVIE or SERIES
+  title           String
+  description     String
+  posterUrl       String
+  backdropUrl     String
+  trailerUrl      String?
+  videoUrl        String?
+  tagline         String?
+  genres          String   
+  rating          Float    @default(0.0)
+  ratingCount     Int      @default(0)
+  year            Int
+  duration        String
+  director        String?
+  cast            String?  
+  language        String?
+  country         String?
+  releaseDate     String?
+  
+  // Rental System Pricing
+  previewDuration Int      @default(120) // in seconds (2 mins)
+  price24h        Float?
+  price7d         Float?
+  priceLifetime   Float?
+  
+  isNew           Boolean  @default(false)
+  isFeatured      Boolean  @default(false)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  rentals         Rental[]
+  watchHistory    WatchHistory[]
+  watchlist       Watchlist[]
+  episodes        Episode[]
+  reviews         Review[]
+}
+
+model Rental {
+  id        String   @id @default(cuid())
+  userId    String
+  movieId   String
+  plan      String   // '24h', '7d', 'lifetime'
+  status    String   @default("ACTIVE") // ACTIVE, EXPIRED
+  expiresAt DateTime?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  movie     Movie    @relation(fields: [movieId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([movieId])
+}
+
+model Payment {
+  id            String   @id @default(cuid())
+  userId        String
+  amount        Float
+  method        String   // 'promptpay', 'credit_card'
+  status        String   @default("PENDING") // PENDING, SUCCESS, FAILED
+  transactionId String?  @unique
+  slipUrl       String?  // URL of uploaded payment slip
+  rentalPlan    String?  // The plan they bought (optional reference)
+  movieId       String?  // The movie they are paying for
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model WatchHistory {
+  id          String   @id @default(cuid())
+  userId      String
+  movieId     String
+  progress    Int      @default(0) // seconds watched
+  completed   Boolean  @default(false)
+  lastWatched DateTime @default(now())
+
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  movie       Movie    @relation(fields: [movieId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, movieId])
+}
+
+model Watchlist {
+  id        String   @id @default(cuid())
+  userId    String
+  movieId   String
+  createdAt DateTime @default(now())
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  movie     Movie    @relation(fields: [movieId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, movieId])
+}
+
+model Coupon {
+  id             String   @id @default(cuid())
+  code           String   @unique
+  discountAmount Float
+  isActive       Boolean  @default(true)
+  maxUses        Int?     // null means unlimited
+  usedCount      Int      @default(0)
+  expiresAt      DateTime?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+model SystemSetting {
+  id                 String   @id @default("1")
+  siteName           String   @default("CineVault")
+  logoUrl            String?
+  seoTitle           String   @default("CineVault - Premium Movies")
+  seoDescription     String   @default("Watch premium movies online.")
+  paymentAccountNo   String?
+  paymentAccountName String?
+  updatedAt          DateTime @updatedAt
+}
+
+model Category {
+  id        String   @id @default(cuid())
+  name      String
+  iconName  String   @default("Film")
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Episode {
+  id        String   @id @default(cuid())
+  movieId   String
+  epNumber  Int
+  title     String
+  videoUrl  String
+  duration  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  movie     Movie    @relation(fields: [movieId], references: [id], onDelete: Cascade)
+  
+  @@unique([movieId, epNumber])
+}
+
+model Review {
+  id        String   @id @default(cuid())
+  userId    String
+  movieId   String
+  rating    Int
+  comment   String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  movie     Movie    @relation(fields: [movieId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, movieId])
+}
+
+model Subscription {
+  id        String   @id @default(cuid())
+  userId    String
+  planId    String
+  status    String   @default("ACTIVE")
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title     String
+  message   String
+  type      String   @default("USER") // "USER" or "ADMIN"
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
