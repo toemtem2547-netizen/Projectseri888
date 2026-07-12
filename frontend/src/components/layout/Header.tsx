@@ -30,6 +30,10 @@ export default function Header({ session, siteName, logoUrl }: { session: any, s
   const [showNotifications, setShowNotifications] = useState(false);
   const [sheetOpen, setSheetOpen] = useState(false);
 
+  const closeSheetDelay = () => {
+    setTimeout(() => setSheetOpen(false), 150);
+  };
+
   useEffect(() => {
     if (session?.user?.id) {
       fetch("/api/notifications")
@@ -262,7 +266,7 @@ export default function Header({ session, siteName, logoUrl }: { session: any, s
                       key={link.href}
                       href={link.href}
                       prefetch={true}
-                      onClick={() => setSheetOpen(false)}
+                      onClick={closeSheetDelay}
                       className={`block px-4 py-3 rounded-xl transition-all text-lg ${pathname === link.href ? "bg-cv-primary/10 text-cv-primary font-bold border border-cv-primary/20" : "text-cv-text-dim hover:text-white hover:bg-white/5"}`}
                     >
                       {link.label}
@@ -274,7 +278,7 @@ export default function Header({ session, siteName, logoUrl }: { session: any, s
                       <Link
                         href="/profile"
                         prefetch={true}
-                        onClick={() => setSheetOpen(false)}
+                        onClick={closeSheetDelay}
                         className="block px-4 py-3 text-cv-text-dim hover:text-white hover:bg-white/5 rounded-xl transition-all text-lg"
                       >
                         โปรไฟล์ของฉัน
@@ -283,7 +287,7 @@ export default function Header({ session, siteName, logoUrl }: { session: any, s
                         <Link
                           href="/admin"
                           prefetch={true}
-                          onClick={() => setSheetOpen(false)}
+                          onClick={closeSheetDelay}
                           className="block px-4 py-3 text-cv-text-dim hover:text-white hover:bg-white/5 rounded-xl transition-all text-lg"
                         >
                           แดชบอร์ดผู้ดูแล
@@ -292,7 +296,7 @@ export default function Header({ session, siteName, logoUrl }: { session: any, s
                       <Link
                         href="/watchlist"
                         prefetch={true}
-                        onClick={() => setSheetOpen(false)}
+                        onClick={closeSheetDelay}
                         className="block px-4 py-3 text-cv-text-dim hover:text-white hover:bg-white/5 rounded-xl transition-all text-lg"
                       >
                         หนังที่อยากดู (Watchlist)
@@ -310,7 +314,7 @@ export default function Header({ session, siteName, logoUrl }: { session: any, s
                   ) : (
                     <Link
                       href="/login"
-                      onClick={() => setSheetOpen(false)}
+                      onClick={closeSheetDelay}
                       className="block px-4 py-3 text-cv-primary hover:text-cv-accent hover:bg-white/5 rounded-xl transition-all text-lg font-medium"
                     >
                       เข้าสู่ระบบ
