@@ -273,6 +273,15 @@ export default function Header({ session, siteName, logoUrl }: { session: any, s
                     </Link>
                   ))}
                   <div className="h-px bg-cv-border my-4" />
+                  <Link
+                    href="/pricing"
+                    prefetch={true}
+                    onClick={closeSheetDelay}
+                    className="flex items-center gap-2 px-4 py-3 bg-gradient-to-r from-yellow-500 to-yellow-600 text-black rounded-xl transition-all text-lg font-bold mb-2 shadow-[0_0_15px_rgba(234,179,8,0.3)]"
+                  >
+                    <Sparkles className="w-5 h-5" />
+                    สมัคร VIP พรีเมียม
+                  </Link>
                   {session ? (
                     <>
                       <Link
