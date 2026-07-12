@@ -31,6 +31,7 @@ export default function PreviewPlayer({ movie, previewSeconds = PREVIEW_DURATION
   const [pausedAt, setPausedAt] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
   const [showNextEpisode, setShowNextEpisode] = useState(false);
+  const [autoVertical, setAutoVertical] = useState(false);
   const { unlockedMovies, unlockMovie, resumeTime, setResumeTime } = usePreviewAccess();
   
   // Ref for tracking the last time we synced to avoid spamming the API
@@ -221,7 +222,14 @@ export default function PreviewPlayer({ movie, previewSeconds = PREVIEW_DURATION
     return `เหลือเวลา ${remainingTime} วินาที`;
   }, [hasStarted, isUnlocked, remainingTime]);
 
-  const isSeriesState = isVertical ?? (movie.type === 'SERIES');
+  const isSeriesState = isVertical ?? (movie.type === 'SERIES' || autoVertical);
+
+  const handleLoadedMetadata = (e: React.SyntheticEvent<HTMLVideoElement, Event>) => {
+    const video = e.currentTarget;
+    if (video.videoHeight > video.videoWidth) {
+      setAutoVertical(true);
+    }
+  };
 
   const cleanIframeUrl = useMemo(() => {
     let url = movie.videoUrl || "";
@@ -268,6 +276,7 @@ export default function PreviewPlayer({ movie, previewSeconds = PREVIEW_DURATION
           muted
           playsInline
           preload="metadata"
+          onLoadedMetadata={handleLoadedMetadata}
           onEnded={() => {
             if (!isUnlocked) setShowPaywall(true);
             else if (nextEpisodeUrl) router.push(nextEpisodeUrl);
