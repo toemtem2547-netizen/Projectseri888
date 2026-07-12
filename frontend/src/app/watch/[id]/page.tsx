@@ -60,7 +60,7 @@ export default async function WatchPage({ params, searchParams }: Props) {
     }
   }
 
-  const isSeries = movie.type === 'SERIES' && movie.episodes.length > 0;
+  const isSeries = movie.type === 'SERIES';
 
   return (
     <main className="min-h-screen bg-cv-deep p-4 md:p-6 text-white pt-24">
@@ -71,10 +71,11 @@ export default async function WatchPage({ params, searchParams }: Props) {
               <h1 className="mb-4 text-2xl font-bold font-heading">{titleToPlay}</h1>
               <PreviewPlayer 
                 movie={playerMovie} 
+                previewSeconds={movie.previewDuration}
                 isUnlockedServer={isUnlockedServer} 
                 initialProgress={initialProgress}
                 nextEpisodeUrl={isSeries && currentEpNumber < movie.episodes.length ? `/watch/${movie.id}?ep=${currentEpNumber + 1}` : undefined}
-                isVertical={isSeries}
+                isVertical={movie.type === 'SERIES'}
               />
 
               <section className="mt-6 rounded-2xl bg-white/5 border border-white/10 p-5 backdrop-blur-md">
@@ -85,7 +86,7 @@ export default async function WatchPage({ params, searchParams }: Props) {
           </div>
 
           {/* Episode Sidebar for Series */}
-          {isSeries && (
+          {isSeries && movie.episodes.length > 0 && (
             <div className="lg:col-span-1 h-full">
               <div className="bg-white/5 border border-white/10 rounded-2xl p-4 sticky top-24 max-h-[calc(100vh-120px)] flex flex-col">
                 <h2 className="text-xl font-bold text-white mb-4 font-heading flex items-center gap-2">
