@@ -52,8 +52,8 @@ export default function RegisterPage() {
       <div className="w-full max-w-md relative z-10 glass-card p-8 rounded-3xl border border-white/10 shadow-2xl shadow-black/50">
         <div className="flex flex-col items-center mb-8">
           <Link href="/" className="flex items-center gap-2 group mb-6">
-            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-cv-primary to-cv-secondary flex items-center justify-center shadow-lg shadow-cv-primary/30">
-              <Film className="w-6 h-6 text-white" />
+            <div className="relative h-14 w-auto flex items-center justify-center">
+              <img src="/logo.png" alt={APP_NAME} className="h-full w-auto object-contain drop-shadow-lg" />
             </div>
             <span className="text-2xl font-bold font-heading text-white">{APP_NAME}</span>
           </Link>

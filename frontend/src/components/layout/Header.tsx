@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Search,
@@ -23,6 +24,7 @@ export default function Header({ session, siteName, logoUrl }: { session: any, s
   const [scrolled, setScrolled] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const pathname = usePathname();
   const [searchResults, setSearchResults] = useState<any[]>([]);
   const [notifications, setNotifications] = useState<any[]>([]);
   const [showNotifications, setShowNotifications] = useState(false);
@@ -88,7 +90,7 @@ export default function Header({ session, siteName, logoUrl }: { session: any, s
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2 group">
             <div className="relative">
-              <img src="/logo.png" alt={siteName || APP_NAME} className="h-12 w-auto object-contain rounded-lg drop-shadow-md" />
+              <img src={logoUrl || "/logo.png"} alt={siteName || APP_NAME} className="h-12 w-auto object-contain rounded-lg drop-shadow-md" />
             </div>
             <span className="text-2xl font-black font-number bg-gradient-to-r from-white via-yellow-100 to-yellow-500 bg-clip-text text-transparent tracking-tight drop-shadow-sm uppercase">
               {siteName || APP_NAME}
@@ -102,10 +104,10 @@ export default function Header({ session, siteName, logoUrl }: { session: any, s
                 key={link.href}
                 href={link.href}
                 prefetch={true}
-                className="px-5 py-2.5 text-base font-medium text-cv-text-dim hover:text-white transition-colors rounded-xl hover:bg-white/5 relative group"
+                className={`px-5 py-2.5 text-base font-medium transition-colors rounded-xl hover:bg-white/5 relative group ${pathname === link.href ? "text-white font-bold" : "text-cv-text-dim hover:text-white"}`}
               >
                 {link.label}
-                <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-gradient-to-r from-cv-primary to-cv-accent group-hover:w-8 transition-all duration-300 rounded-full" />
+                <span className={`absolute bottom-0 left-1/2 -translate-x-1/2 h-0.5 rounded-full transition-all duration-300 ${pathname === link.href ? "w-8 bg-cv-primary" : "w-0 bg-gradient-to-r from-cv-primary to-cv-accent group-hover:w-8"}`} />
               </Link>
             ))}
           </nav>
@@ -258,7 +260,7 @@ export default function Header({ session, siteName, logoUrl }: { session: any, s
                     <Link
                       key={link.href}
                       href={link.href}
-                      className="px-4 py-3 text-cv-text-dim hover:text-white hover:bg-white/5 rounded-xl transition-all text-lg"
+                      className={`px-4 py-3 rounded-xl transition-all text-lg ${pathname === link.href ? "bg-cv-primary/10 text-cv-primary font-bold border border-cv-primary/20" : "text-cv-text-dim hover:text-white hover:bg-white/5"}`}
                     >
                       {link.label}
                     </Link>
