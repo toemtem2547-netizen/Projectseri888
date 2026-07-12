@@ -3,6 +3,7 @@ import { Prompt, Outfit } from "next/font/google";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { PreviewAccessProvider } from "@/components/providers/PreviewAccessProvider";
 import { Toaster } from "@/components/ui/sonner";
+import NextTopLoader from "nextjs-toploader";
 import "./globals.css";
 
 const prompt = Prompt({
@@ -43,6 +44,7 @@ export default function RootLayout({
   return (
     <html lang="th" className={`${prompt.variable} ${outfit.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col bg-cv-deep text-cv-text">
+        <NextTopLoader color="#EAB308" showSpinner={false} />
         <TooltipProvider>
           <PreviewAccessProvider>{children}</PreviewAccessProvider>
         </TooltipProvider>

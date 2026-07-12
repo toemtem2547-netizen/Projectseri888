@@ -261,6 +261,7 @@ export default function Header({ session, siteName, logoUrl }: { session: any, s
                     <Link
                       key={link.href}
                       href={link.href}
+                      prefetch={true}
                       onClick={() => setSheetOpen(false)}
                       className={`block px-4 py-3 rounded-xl transition-all text-lg ${pathname === link.href ? "bg-cv-primary/10 text-cv-primary font-bold border border-cv-primary/20" : "text-cv-text-dim hover:text-white hover:bg-white/5"}`}
                     >
@@ -272,6 +273,7 @@ export default function Header({ session, siteName, logoUrl }: { session: any, s
                     <>
                       <Link
                         href="/profile"
+                        prefetch={true}
                         onClick={() => setSheetOpen(false)}
                         className="block px-4 py-3 text-cv-text-dim hover:text-white hover:bg-white/5 rounded-xl transition-all text-lg"
                       >
@@ -280,6 +282,7 @@ export default function Header({ session, siteName, logoUrl }: { session: any, s
                       {session?.user?.role === "ADMIN" && (
                         <Link
                           href="/admin"
+                          prefetch={true}
                           onClick={() => setSheetOpen(false)}
                           className="block px-4 py-3 text-cv-text-dim hover:text-white hover:bg-white/5 rounded-xl transition-all text-lg"
                         >
@@ -288,6 +291,7 @@ export default function Header({ session, siteName, logoUrl }: { session: any, s
                       )}
                       <Link
                         href="/watchlist"
+                        prefetch={true}
                         onClick={() => setSheetOpen(false)}
                         className="block px-4 py-3 text-cv-text-dim hover:text-white hover:bg-white/5 rounded-xl transition-all text-lg"
                       >
