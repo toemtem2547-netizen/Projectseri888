@@ -277,10 +277,10 @@ export default function Header({ session, siteName, logoUrl }: { session: any, s
                     href="/pricing"
                     prefetch={true}
                     onClick={closeSheetDelay}
-                    className="flex items-center gap-2 px-4 py-3 bg-gradient-to-r from-yellow-500 to-yellow-600 text-black rounded-xl transition-all text-lg font-bold mb-2 shadow-[0_0_15px_rgba(234,179,8,0.3)]"
+                    className="flex items-center gap-2 px-4 py-3 text-cv-primary hover:text-cv-accent hover:bg-white/5 rounded-xl transition-all text-lg font-medium"
                   >
                     <Sparkles className="w-5 h-5" />
-                    สมัคร VIP พรีเมียม
+                    สมัคร VIP
                   </Link>
                   {session ? (
                     <>
