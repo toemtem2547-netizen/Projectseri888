@@ -232,8 +232,9 @@ export default function PreviewPlayer({ movie, previewSeconds = PREVIEW_DURATION
   }, [movie.videoUrl]);
 
   return (
-    <div className={`relative mx-auto w-full overflow-hidden rounded-[32px] border border-white/10 bg-black/80 shadow-[0_30px_120px_rgba(15,23,42,0.7)] ${isSeriesState ? 'max-w-[450px] aspect-[9/16]' : 'max-w-[1440px] aspect-video'}`}>
-      
+    <div className="mx-auto w-full max-w-[1440px] flex flex-col gap-4">
+      {/* Video Container */}
+      <div className={`relative w-full overflow-hidden rounded-[32px] border border-white/10 bg-black/80 shadow-[0_30px_120px_rgba(15,23,42,0.7)] ${isSeriesState ? 'max-w-[450px] mx-auto aspect-[9/16]' : 'aspect-video'}`}>
       {isIframe ? (
         (!isUnlocked && currentTime >= previewSeconds) ? (
           <div className="w-full h-full bg-black flex flex-col items-center justify-center relative">
@@ -274,43 +275,7 @@ export default function PreviewPlayer({ movie, previewSeconds = PREVIEW_DURATION
         />
       )}
 
-      <div className="absolute inset-x-0 top-0 p-4 pointer-events-none">
-        <div className="flex items-center gap-2 pointer-events-auto">
-          <button 
-            onClick={() => router.push(`/movie/${movie.id}`)}
-            className="flex-shrink-0 flex items-center justify-center w-9 h-9 rounded-full border border-white/10 bg-black/40 text-white hover:bg-white/20 hover:scale-105 transition-all backdrop-blur"
-            title="ออกจากตัวอย่าง"
-          >
-            <X className="w-5 h-5" />
-          </button>
-          
-          <div className="flex flex-1 items-center justify-between rounded-full border border-white/10 bg-black/40 px-4 py-2 text-sm backdrop-blur">
-            <div className="flex items-center gap-2 text-cv-accent">
-              <Clock3 className="h-4 w-4" />
-              <span>{statusLabel}</span>
-            </div>
-            <div className="rounded-full bg-white/10 px-3 py-1 text-xs text-white">
-              {isPlaying ? "กำลังเล่น" : "หยุดชั่วคราว"}
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {!isUnlocked && (
-        <div className="absolute inset-x-0 bottom-12 p-4 pointer-events-none opacity-80 hover:opacity-100 transition-opacity">
-          <div className="rounded-2xl border border-white/10 bg-black/40 p-3 backdrop-blur">
-            <div className="mb-2 flex items-center justify-between text-sm text-cv-text-dim">
-              <span>เวลาตัวอย่างคงเหลือ</span>
-              <span>{remainingTime} วินาที</span>
-            </div>
-            <div className="h-2 overflow-hidden rounded-full bg-white/10">
-              <div className="h-full rounded-full bg-gradient-to-r from-cv-primary to-cv-accent" style={{ width: `${Math.max(6, progressPercent)}%` }} />
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Next Episode Button overlay */}
+      {/* Next Episode Button overlay (Kept inside video) */}
       {showNextEpisode && nextEpisodeUrl && (
         <div className="absolute bottom-24 right-4 z-20 animate-in fade-in slide-in-from-right-4 duration-500">
           <button 
@@ -365,6 +330,44 @@ export default function PreviewPlayer({ movie, previewSeconds = PREVIEW_DURATION
           </button>
         </div>
       )}
+      </div>
+
+      {/* External Status Bar (Replaces overlapping UI) */}
+      <div className="w-full rounded-2xl border border-white/10 bg-white/5 p-4 backdrop-blur flex flex-col md:flex-row items-center justify-between gap-4">
+        <div className="flex items-center gap-4 w-full md:w-auto">
+          <button 
+            onClick={() => router.push(`/movie/${movie.id}`)}
+            className="flex-shrink-0 flex items-center justify-center w-12 h-12 rounded-full border border-white/10 bg-white/5 text-white hover:bg-white/20 hover:scale-105 transition-all"
+            title="ออกจากตัวอย่าง"
+          >
+            <X className="w-6 h-6" />
+          </button>
+          
+          <div className="flex flex-col">
+            <span className="text-sm text-cv-text-dim">สถานะ</span>
+            <div className="flex items-center gap-2 text-cv-accent font-medium">
+              <Clock3 className="h-4 w-4" />
+              <span>{statusLabel}</span>
+            </div>
+          </div>
+        </div>
+
+        {!isUnlocked && (
+          <div className="w-full flex-1 md:max-w-md">
+            <div className="mb-2 flex items-center justify-between text-xs text-cv-text-dim">
+              <span>เวลาตัวอย่างคงเหลือ</span>
+              <span>{remainingTime} วินาที</span>
+            </div>
+            <div className="h-2 w-full overflow-hidden rounded-full bg-white/10">
+              <div className="h-full rounded-full bg-gradient-to-r from-cv-primary to-cv-accent transition-all duration-1000 ease-linear" style={{ width: `${Math.max(2, progressPercent)}%` }} />
+            </div>
+          </div>
+        )}
+
+        <div className="hidden md:flex rounded-full bg-white/10 px-4 py-2 text-sm text-white">
+          {isPlaying ? "▶ กำลังเล่น" : "⏸ หยุดชั่วคราว"}
+        </div>
+      </div>
     </div>
   );
 }
