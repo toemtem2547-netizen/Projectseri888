@@ -42,7 +42,7 @@ export default function PreviewPlayer({ movie, previewSeconds = PREVIEW_DURATION
   const isIframe = useMemo(() => {
     const url = movie.videoUrl || "";
     if (url.match(/\.(mp4|m3u8|webm)$/i)) return false;
-    return url.includes('/e/') || url.includes('/v/') || url.includes('/embed/') || url.includes('iframe') || url.includes('youtube.com/') || url.includes('vimeo.com/') || url.includes('vidara.to') || url.includes('yandex.com') || url.includes('disk.yandex.com') || url.includes('player.php');
+    return url.includes('/e/') || url.includes('/v/') || url.includes('/embed/') || url.includes('iframe') || url.includes('youtube.com/') || url.includes('vimeo.com/') || url.includes('vidara.') || url.includes('yandex.com') || url.includes('disk.yandex.com') || url.includes('player.php');
   }, [movie.videoUrl]);
 
   const { remainingTime, progressPercent } = usePreviewTimer({
@@ -233,12 +233,13 @@ export default function PreviewPlayer({ movie, previewSeconds = PREVIEW_DURATION
 
   const cleanIframeUrl = useMemo(() => {
     let url = movie.videoUrl || "";
-    if (url.includes('vidara.to')) {
+    if (url.includes('vidara.')) {
       // Common pattern: replace /f/ or /v/ or direct ID with embed-ID.html if not already an embed
       if (!url.includes('embed-') && !url.includes('/e/')) {
-        const match = url.match(/vidara\.to\/(?:f\/|v\/)?([a-zA-Z0-9]+)/i);
+        const match = url.match(/vidara\.[a-z]+\/(?:f\/|v\/)?([a-zA-Z0-9]+)/i);
         if (match && match[1]) {
-          url = `https://vidara.to/embed-${match[1]}.html`;
+          const domain = url.match(/(vidara\.[a-z]+)/i)?.[1] || 'vidara.to';
+          url = `https://${domain}/embed-${match[1]}.html`;
         }
       }
     }
