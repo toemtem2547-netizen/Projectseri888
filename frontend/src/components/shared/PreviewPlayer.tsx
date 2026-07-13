@@ -233,11 +233,14 @@ export default function PreviewPlayer({ movie, previewSeconds = PREVIEW_DURATION
 
   const cleanIframeUrl = useMemo(() => {
     let url = movie.videoUrl || "";
-    if (url.includes('vidara.to/v/')) {
-      url = url.replace('vidara.to/v/', 'vidara.to/e/');
-    }
-    if (url.includes('vidara.to/f/')) {
-      url = url.replace('vidara.to/f/', 'vidara.to/e/');
+    if (url.includes('vidara.to')) {
+      // Common pattern: replace /f/ or /v/ or direct ID with embed-ID.html if not already an embed
+      if (!url.includes('embed-') && !url.includes('/e/')) {
+        const match = url.match(/vidara\.to\/(?:f\/|v\/)?([a-zA-Z0-9]+)/i);
+        if (match && match[1]) {
+          url = `https://vidara.to/embed-${match[1]}.html`;
+        }
+      }
     }
     return url;
   }, [movie.videoUrl]);
