@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import PreviewPlayer from "@/components/shared/PreviewPlayer";
 import { prisma } from "@/lib/db";
 import { auth } from "@/auth";
+import { PREVIEW_DURATION } from "@/lib/constants";
 
 interface Props {
   params: Promise<{ id: string }>;
@@ -77,7 +78,7 @@ export default async function WatchPage({ params, searchParams }: Props) {
               <h1 className="mb-4 text-2xl font-bold font-heading">{titleToPlay}</h1>
               <PreviewPlayer 
                 movie={playerMovie} 
-                previewSeconds={movie.previewDuration}
+                previewSeconds={1080}
                 isUnlockedServer={isUnlockedServer} 
                 initialProgress={initialProgress}
                 nextEpisodeUrl={isSeries && currentEpNumber < movie.episodes.length ? `/watch/${movie.id}?ep=${currentEpNumber + 1}` : undefined}

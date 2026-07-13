@@ -233,16 +233,53 @@ export default function PreviewPlayer({ movie, previewSeconds = PREVIEW_DURATION
 
   const cleanIframeUrl = useMemo(() => {
     let url = movie.videoUrl || "";
-    if (url.includes('vidara.')) {
-      // Replace /f/ or /v/ with /e/ for embed mode
-      if (!url.includes('/e/')) {
-        const match = url.match(/vidara\.[a-z]+\/(?:f\/|v\/)?([a-zA-Z0-9]+)/i);
+    if (!url) return url;
+    
+    try {
+      const lowerUrl = url.toLowerCase();
+      
+      // Doodstream
+      if (lowerUrl.includes('dood.')) {
+        const match = url.match(/dood\.(?:to|watch|yt|re|pm|so|sh|ws|stream)\/(?:d|v|e)\/([a-zA-Z0-9]+)/i);
         if (match && match[1]) {
-          const domain = url.match(/(vidara\.[a-z]+)/i)?.[1] || 'vidara.to';
-          url = `https://${domain}/e/${match[1]}`;
+          const domain = url.match(/dood\.[a-z]+/i)?.[0] || 'dood.to';
+          return `https://${domain}/e/${match[1]}`;
         }
       }
+      
+      // Streamtape
+      if (lowerUrl.includes('streamtape.com')) {
+        const match = url.match(/streamtape\.com\/(?:v|e)\/([a-zA-Z0-9_-]+)/i);
+        if (match && match[1]) return `https://streamtape.com/e/${match[1]}`;
+      }
+      
+      // Voe
+      if (lowerUrl.includes('voe.sx')) {
+        const match = url.match(/voe\.sx\/(?:e\/)?([a-zA-Z0-9_-]+)/i);
+        if (match && match[1]) return `https://voe.sx/e/${match[1]}`;
+      }
+      
+      // YouTube
+      if (lowerUrl.includes('youtube.com/watch') || lowerUrl.includes('youtu.be/')) {
+        const match = url.match(/(?:v=|youtu\.be\/)([^&]+)/i);
+        if (match && match[1]) return `https://www.youtube.com/embed/${match[1]}`;
+      }
+
+      // Vidara / Vidoza clone
+      if (lowerUrl.includes('vidara.')) {
+        // If it already looks like an embed URL, keep it as is
+        if (lowerUrl.includes('/e/') || lowerUrl.includes('embed')) return url;
+        
+        const match = url.match(/vidara\.[a-z]+\/(?:v\/|f\/)?([a-zA-Z0-9]+)/i);
+        if (match && match[1]) {
+          const domain = url.match(/(vidara\.[a-z]+)/i)?.[1] || 'vidara.so';
+          return `https://${domain}/e/${match[1]}`;
+        }
+      }
+    } catch (e) {
+      console.error("Error parsing iframe URL", e);
     }
+    
     return url;
   }, [movie.videoUrl]);
 
