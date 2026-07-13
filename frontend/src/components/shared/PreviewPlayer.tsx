@@ -236,6 +236,9 @@ export default function PreviewPlayer({ movie, previewSeconds = PREVIEW_DURATION
     if (url.includes('vidara.to/v/')) {
       url = url.replace('vidara.to/v/', 'vidara.to/e/');
     }
+    if (url.includes('vidara.to/f/')) {
+      url = url.replace('vidara.to/f/', 'vidara.to/e/');
+    }
     return url;
   }, [movie.videoUrl]);
 
